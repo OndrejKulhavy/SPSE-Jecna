@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+            integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz"
+            crossorigin="anonymous"></script>
+    <script>
+        var socket;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            socket = io.connect('http://ondrej.codes:5000');
+            document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+
+
+            socket.on('connect', function () {
+                socket.emit('joined', {});
+            });
+
+
+            socket.on('message', function (data) {
+                const messageContainer = generateMessageHTML(data.msg, data.author, data.timestamp);
+                document.getElementById('messages').appendChild(messageContainer);
+                document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+            });
+
+            document.getElementById('text').addEventListener('keypress', function (e) {
+                var code = e.keyCode || e.which;
+                if (code === 13) {
+                    var text = document.getElementById('text').value;
+                    document.getElementById('text').value = '';
+                    socket.emit('text', {msg: text});
+                }
+            });
+
+            function generateMessageHTML(message, author, timestamp) {
+                const messageContainer = document.createElement('div');
+                const messageContent = document.createElement('div');
+                const timestampElement = document.createElement('p');
+
+                if (author === "{{ owner_username }}") {
+                    messageContainer.classList.add('flex', 'items-end', 'justify-end');
+                    messageContent.classList.add('p-4', 'rounded-lg', 'bg-blue-50', 'dark:bg-blue-900', 'inline-block', 'max-w-xs', 'text-sm');
+                    timestampElement.classList.add('text-xs', 'text-gray-500', 'mt-2', 'text-right');
+
+                    messageContent.innerHTML = `<p>${message}</p>`;
+                    timestampElement.innerHTML = `${author} - ${timestamp}`;
+
+                    messageContent.appendChild(timestampElement);
+                    messageContainer.appendChild(messageContent);
+                } else {
+                    messageContainer.classList.add('flex', 'items-end', 'justify-start');
+                    messageContent.classList.add('p-4', 'rounded-lg', 'bg-gray-200', 'dark:bg-gray-700', 'inline-block', 'max-w-xs', 'text-sm');
+                    timestampElement.classList.add('text-xs', 'text-gray-500', 'mt-2');
+
+                    messageContent.innerHTML = `<p>${message}</p>`;
+                    timestampElement.innerHTML = `${author} - ${timestamp}`;
+
+                    messageContent.appendChild(timestampElement);
+                    messageContainer.appendChild(messageContent);
+                }
+
+                return messageContainer;
+            }
+
+        });
+
+    </script>
+    <title>Chat</title>
+</head>
+<body>
+<div class="flex h-screen bg-gray-50">
+    <aside class="w-64 bg-white dark:bg-gray-800 border-r">
+        <div class="p-6"><h1 class="text-2xl font-bold">ChatApp</h1>
+            <div class="mt-6">
+                <button id="open_modal"
+                        class="inline-flex items-center justify-center w-full h-10 px-4 py-2 text-sm font-medium transition-colors duration-300 ease-in-out border border-primary rounded-md ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/90 disabled:pointer-events-none disabled:opacity-50">
+                    New Conversation
+                </button>
+            </div>
+        </div>
+        <nav id="rooms" class="flex-1 overflow-y-auto p-6 space-y-2">
+
+            {% for room in rooms %}
+            <div id="{{ room['room_name'] }}"
+                 class="flex items-center space-x-3 cursor-pointer hover:bg-gray-200 transition-all rounded p-2 chat-room">
+                <img src="https://raw.githubusercontent.com/OndrejKulhavy/ChatApp/main/db/data/user_profile_picture.png"
+                     width="24" height="24">
+                <div class="flex-1">
+                    {% if room_name == room['room_name']: %}
+                    <h2 class="text-sm font-bold">{{ room['room_name'] }}</h2>
+                    {% else %}
+                    <h2 class="text-sm font-semibold">{{ room['room_name'] }}</h2>
+                    {% endif %}
+                    <p class="text-xs text-gray-500">Active now</p>
+                </div>
+                <div class="inline-flex items-center border px-2.5 py-0.5 text-xs font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent text-primary-foreground hover:bg-primary/80 h-3 w-3 rounded-full bg-green-500"></div>
+            </div>
+            {% endfor %}
+
+        </nav>
+    </aside>
+    <main class="flex-1 flex flex-col">
+        <header class="flex items-center justify-between p-6 border-b"><h2 class="text-xl font-bold">{{
+            room }}</h2>
+            <a href="{{ url_for('logout') }}"
+               class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-black text-white hover:bg-accent hover:text-accent-foreground h-10 w-20">
+                <p>Log Out</p>
+            </a>
+        </header>
+
+        <section id="messages" class="flex-1 overflow-y-auto p-6 space-y-4">
+
+            {% for message in messages %}
+            {% if message['user_id'] == owner_id: %}
+            <div class="flex items-end justify-end">
+                <div class="p-4 rounded-lg bg-blue-50 dark:bg-blue-900 inline-block max-w-xs text-sm">
+                    <p>{{ message['content'] }}</p>
+                    <p class="text-xs text-gray-500 mt-2 text-right">{{ message['timestamp'] }}</p>
+                </div>
+            </div>
+            {% else %}
+            <div class="flex items-end justify-start">
+                <div class="p-4 rounded-lg bg-gray-200 dark:bg-gray-700 inline-block max-w-xs text-sm">
+                    <p>{{ message['content'] }}</p>
+                    <p class="text-xs text-gray-500 mt-2">{{ message['timestamp'] }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+
+
+        </section>
+
+        <footer class="p-6 border-t">
+            <form class="flex space-x-4" onsubmit="return false;"><input
+                    id="text"
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
+                    placeholder="Type a message…">
+                <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                        type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                         class="h-5 w-5">
+                        <path d="m22 2-7 20-4-9-9-4Z"></path>
+                        <path d="M22 2 11 13"></path>
+                    </svg>
+                </button>
+            </form>
+        </footer>
+    </main>
+</div>
+
+
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-25 flex justify-center items-center hidden">
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-[400px] bg-white" data-v0-t="card">
+        <div class="flex flex-col space-y-1.5 p-6">
+            <h3 class="text-2xl font-semibold leading-none tracking-tight">Create New Chat Room</h3>
+        </div>
+        <div class="p-6">
+            <form class="space-y-4">
+                <div class="flex flex-col space-y-1.5">
+                    <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="chatRoomName"
+                    >
+                        Room Name
+                    </label>
+                    <input
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            id="chatRoomName"
+                            placeholder="Enter room name"
+                    />
+                </div>
+                <div class="flex flex-col space-y-1.5">
+                    <label
+                            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            for="addPeople"
+                    >
+                        Add People
+                    </label>
+                    <input
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            id="addPeople"
+                            placeholder="Type to search..."
+                    />
+
+                    <div class="relative" style="margin: 0">
+                        <div class="absolute z-10 mt-0 w-full bg-white border border-gray-200 shadow-lg rounded-md">
+                            <ul id="search_list" class="divide-y divide-gray-200">
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div id="added_people" class="space-y-2">
+
+                </div>
+            </form>
+        </div>
+        <div class="items-center p-6 flex justify-end space-x-2">
+            <button type="button" id="close_modal"
+                    class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+                Cancel
+            </button>
+            <button type="button" id="send_modal"
+                    class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+                Create
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('modal');
+    const modalOpenButton = document.getElementById('open_modal');
+    const modalCloseButton = document.getElementById('close_modal');
+
+    modalOpenButton.addEventListener('click', () => {
+        modal.classList.add('block');
+        modal.classList.remove('hidden');
+    });
+
+    modalCloseButton.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        modal.classList.remove('block');
+    });
+    onload = () => {
+        const chatRooms = document.getElementsByClassName('chat-room');
+        for (let i = 0; i < chatRooms.length; i++) {
+            chatRooms[i].addEventListener('click', () => {
+                window.location.href = `http://ondrej.codes:5000/chat/room/${chatRooms[i].id}`;
+            });
+        }
+    }
+
+</script>
+
+<script>
+    const addPeople = document.getElementById('addPeople');
+    const searchList = document.getElementById('search_list');
+    const addedPeople = document.getElementById('added_people');
+    const sendModal = document.getElementById('send_modal');
+    let listOfAddedPeople = [];
+
+    function createSearchResult(name, isSystemMessage = false) {
+        const li = document.createElement('li');
+        li.classList.add('px-3', 'py-2', 'hover:bg-gray-100', 'cursor-pointer');
+        li.innerText = name;
+        li.addEventListener('click', () => {
+            if (isSystemMessage) {
+                return;
+            }
+            let new_person = createAddedPerson(name);
+            if (new_person)
+                addedPeople.appendChild(new_person);
+            addPeople.value = '';
+            searchList.innerHTML = '';
+        });
+        return li;
+    }
+
+    function createAddedPerson(name) {
+        const div = document.createElement('div');
+        div.classList.add('flex', 'items-center', 'justify-between');
+
+        const span = document.createElement('span');
+        span.classList.add('text-sm', 'pl-2'); // Added left padding
+        span.innerText = "😎 " + name;
+
+        const button = document.createElement('button');
+        button.classList.add(
+            'inline-flex', 'items-center', 'justify-center', 'rounded-md', 'text-sm', 'font-medium',
+            'ring-offset-background', 'transition-colors', 'focus-visible:outline-none', 'focus-visible:ring-2',
+            'focus-visible:ring-ring', 'focus-visible:ring-offset-2', 'disabled:pointer-events-none',
+            'disabled:opacity-50', 'hover:bg-accent', 'hover:text-accent-foreground', 'h-10', 'px-4', 'py-2',
+            'text-red-500', 'border', 'border-gray-300', 'person-to-be-added' // Added border styling
+        );
+        button.innerText = 'Remove';
+        button.type = 'button';
+        button.addEventListener('click', () => {
+            div.remove();
+            listOfAddedPeople.remove(name);
+        });
+
+        div.appendChild(span);
+        div.appendChild(button);
+        if (listOfAddedPeople.includes(name)) {
+            return null;
+        }
+        listOfAddedPeople.push(name);
+        print(listOfAddedPeople)
+        return div;
+    }
+
+    function searchPeople() {
+        fetch(`http://ondrej.codes:5000/api/users?q=${addPeople.value}`)
+            .then(response => response.json())
+            .then(data => {
+                searchList.innerHTML = '';
+                if (data.users.length === 0) {
+                    searchList.appendChild(createSearchResult('😖 I can\'t find anyone with that name.', true));
+                } else {
+                    searchList.innerHTML = '';
+                    data.users.forEach(user => {
+                        searchList.appendChild(createSearchResult(user.username));
+                    });
+                }
+            });
+    }
+
+    addPeople.addEventListener('input', () => {
+        searchList.innerHTML = '';
+        if (addPeople.value.length > 0) {
+            searchList.appendChild(createSearchResult('🔍 Searching for people...', true));
+            searchPeople();
+        } else {
+            searchList.innerHTML = '';
+        }
+    });
+
+    sendModal.addEventListener('click', () => {
+        let formData = new FormData();
+        formData.append('chat_room_name', document.getElementById('chatRoomName').value);
+        formData.append('users', JSON.stringify(listOfAddedPeople));
+
+        fetch("{{ url_for('create_room') }}", {
+            method: "POST",
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = `{{ url_for('chat') }}`;
+                }
+            })
+            .catch(error => {
+            });
+
+    });
+
+</script>
+
+
+</body>
+</html>

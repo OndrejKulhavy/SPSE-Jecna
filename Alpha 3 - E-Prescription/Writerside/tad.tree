@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instance-profile
+        SYSTEM "https://resources.jetbrains.com/writerside/1.0/product-profile.dtd">
+
+<instance-profile id="tad"
+                 name="Third Alpha | Database"
+                 start-page="Get-Started.md">
+
+    <toc-element topic="Get-Started.md">
+        <toc-element topic="Set-Up-Client-App.md"/>
+        <toc-element topic="Set-Up-Database.md"/>
+    </toc-element>
+    <toc-element topic="Overview.md"/>
+    <toc-element topic="Actions-and-Features.md">
+        <toc-element topic="Logging-In.md"/>
+        <toc-element topic="Adding-a-New-Prescription.md"/>
+        <toc-element topic="Adding-a-New-Drug.md"/>
+        <toc-element topic="Adding-a-New-Patient.md">
+        </toc-element>
+        <toc-element topic="Printing-description-details.md"/>
+        <toc-element topic="Openning-Prescription-Details.md"/>
+    </toc-element>
+    <toc-element topic="Analysis.md">
+        <toc-element topic="Database.md"/>
+        <toc-element topic="Requirements.md"/>
+    </toc-element>
+</instance-profile>

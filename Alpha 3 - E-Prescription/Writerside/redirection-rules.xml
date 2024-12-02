@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rules SYSTEM "https://resources.jetbrains.com/writerside/1.0/redirection-rules.dtd">
+<rules>
+    <!-- format is as follows
+    <rule id="<unique id>">
+        <accepts>page.html</accepts>
+    </rule>
+    -->
+    <rule id="3cdde8ed">
+        <description>Created after removal of "About Third Alpha | Database" from Third Alpha | Database</description>
+        <accepts>starter-topic.html</accepts>
+    </rule>
+    <rule id="4288ed6c">
+        <description>
+            <![CDATA[Created after removal of "<Client-app-set-up.md>" from Third Alpha | Database]]></description>
+        <accepts>Client-app-set-up.html</accepts>
+    </rule>
+    <rule id="2ae9cc8a">
+        <description>Created after removal of "Client App Set-Up" from Third Alpha | Database</description>
+        <accepts>Client-App-Set-Up.html</accepts>
+    </rule>
+    <rule id="2f70aeee">
+        <description>Created after removal of "Logging Out" from Third Alpha | Database</description>
+        <accepts>Logging-Out.html</accepts>
+    </rule>
+</rules>

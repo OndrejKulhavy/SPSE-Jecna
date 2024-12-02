@@ -1,0 +1,46 @@
+<!DOCTYPE html SYSTEM "about:legacy-compat">
+<html lang="en-US" data-colors-preset="contrast" data-primary-color="#307FFF"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta charset="UTF-8"><meta name="robots" content="noindex"><meta name="built-on" content="2024-02-04T23:33:50.6637933"><title>Setup | Client App | Third Alpha | Database</title><script type="application/json" id="virtual-toc-data">[{"id":"configuration","level":0,"title":"Configuration","anchor":"#configuration"}]</script><script type="application/json" id="topic-shortcuts"></script><link href="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.css" rel="stylesheet"><link rel="apple-touch-icon" sizes="180x180" href="https://jetbrains.com/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="https://jetbrains.com/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="https://jetbrains.com/favicon-16x16.png"><link rel="manifest" href="site.webmanifest"><meta name="msapplication-TileColor" content="#000000"><meta name="msapplication-TileImage" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-144x144.png"><meta name="msapplication-square70x70logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-70x70.png"><meta name="msapplication-square150x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-150x150.png"><meta name="msapplication-wide310x150logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x150.png"><meta name="msapplication-square310x310logo" content="https://resources.jetbrains.com/storage/ui/favicons/mstile-310x310.png"><meta name="image" content=""><!-- Open Graph --><meta property="og:title" content="Setup | Client App | Third Alpha | Database"><meta property="og:description" content=""><meta property="og:image" content=""><meta property="og:site_name" content="Third Alpha | Database Help"><meta property="og:type" content="website"><meta property="og:locale" content="en_US"><meta property="og:url" content="/tad/1.0.0/set-up-client-app.html"><!-- End Open Graph --><!-- Twitter Card --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content=""><meta name="twitter:title" content="Setup | Client App | Third Alpha | Database"><meta name="twitter:description" content=""><meta name="twitter:creator" content=""><meta name="twitter:image:src" content=""><!-- End Twitter Card --><!-- Schema.org WebPage --><script type="application/ld+json">{
+    "@context": "http://schema.org",
+    "@type": "WebPage",
+    "@id": "/tad/1.0.0/set-up-client-app.html#webpage",
+    "url": "/tad/1.0.0/set-up-client-app.html",
+    "name": "Setup | Client App | Third Alpha | Database",
+    "description": "",
+    "image": "",
+    "inLanguage":"en-US"
+}</script><!-- End Schema.org --><!-- Schema.org WebSite --><script type="application/ld+json">{
+    "@type": "WebSite",
+    "@id": "/tad/#website",
+    "url": "/tad/",
+    "name": "Third Alpha | Database Help"
+}</script><!-- End Schema.org --></head><body data-id="Set-Up-Client-App" data-main-title="Setup | Client App" data-article-props="{&quot;seeAlsoStyle&quot;:&quot;links&quot;}" data-template="article" data-breadcrumbs="Get-Started.md|Getting Started"><div class="wrapper"><main class="panel _main"><header class="panel__header"><div class="container"><h3>Third Alpha | Database 1.0.0 Help</h3><div class="panel-trigger"></div></div></header><section class="panel__content"><div class="container"><article class="article" data-shortcut-switcher="inactive"><h1 data-toc="Set-Up-Client-App" id="Set-Up-Client-App.md">Setup | Client App</h1><p id="f20d684e_2380">Make sure you have <code class="code" id="f20d684e_2381">Python 3.12</code> or higher installed on your machine. You can check this by running <code class="code" id="f20d684e_2382">python --version</code> in your terminal. If you don't have Python installed, you can download it <a href="https://www.python.org/downloads/" id="f20d684e_2383" data-external="true" rel="noopener noreferrer">here</a>.</p><p id="f20d684e_2384">Clone the repository to your local machine or unzip the file downloaded from Moodle and navigate to the <code class="code" id="f20d684e_2385">root</code> directory of the project.</p><aside class="prompt" data-type="warning" data-title="" id="f20d684e_2386"><p id="f20d684e_2387"><b id="f20d684e_2388">Do not install packages without virtual environment</b> as it may cause issues with the packages installed on your machine.</p></aside><div class="tabs" id="f20d684e_2389" data-group="system"><div class="tabs__content" data-gtm="tab" id="f20d684e_2390" data-sync-tabs="windows" data-title="Windows"><p id="f20d684e_2391">Create a virtual environment by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            python -m venv venv
+        </div><p id="f20d684e_2393">Activate virtual environment by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            venv\Scripts\activate
+        </div><p id="f20d684e_2395">Install required packages by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            pip install -r requirements.txt
+        </div><p id="f20d684e_2397">Run the app by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            python main.py
+        </div></div><div class="tabs__content" data-gtm="tab" id="f20d684e_2399" data-sync-tabs="mac" data-title="Mac"><p id="f20d684e_2400">Create a virtual environment by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            python3 -m venv venv
+        </div><p id="f20d684e_2402">Activate virtual environment by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            source venv/bin/activate
+        </div><p id="f20d684e_2404">Install required packages by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            pip install -r requirements.txt
+        </div><p id="f20d684e_2406">Run the app by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            python main.py
+        </div></div><div class="tabs__content" data-gtm="tab" id="f20d684e_2408" data-sync-tabs="linux" data-title="Linux"><p id="f20d684e_2409">Create a virtual environment by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            python3 -m venv venv
+        </div><p id="f20d684e_2411">Activate virtual environment by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            source venv/bin/activate
+        </div><p id="f20d684e_2413">Install required packages by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            pip install -r requirements.txt
+        </div><p id="f20d684e_2415">Run the app by running:</p><div class="code-block" data-lang="bash" data-title="Bash">
+            python main.py
+        </div></div></div><section class="chapter"><h2 id="configuration" data-toc="configuration">Configuration</h2><p id="f20d684e_2417">Don not forget to fill in the `config.ini` file with the correct values for database connection. If you don't have database set up, please refer to the <a href="set-up-database.html" id="f20d684e_2418" data-tooltip="First, make sure you have MySQL installed on your machine. If not, you can download it from the official website here.">database setup</a> guide. You can find the `config.ini` file in the `root` directory of the project.</p><p id="f20d684e_2419">Here is the template for the `config.ini` file:</p><div class="code-block" data-lang="ini">
+    [database]
+    host = 
+    user = 
+    password = 
+    schema = e_prescription
+</div><aside class="prompt" data-type="note" data-title="" id="f20d684e_2421"><p id="f20d684e_2422"><b id="f20d684e_2423">Troubleshooting</b></p><p id="f20d684e_2424">If you encounter any issues, make sure you have followed the steps above correctly and especially that you have activated the virtual environment.</p><p id="f20d684e_2425">If the issue persists, please try to run the app in a different virtual environment. Good Luck👍</p></aside></section><div class="last-modified">Last modified: 04 February 2024</div><div data-feedback-placeholder="true"></div><div class="navigation-links _bottom"><a href="get-started.html" class="navigation-links__prev">Getting Started</a><a href="set-up-database.html" class="navigation-links__next">Setup | Database</a></div></article><div id="disqus_thread"></div></div></section></main></div><script src="https://resources.jetbrains.com/writerside/apidoc/6.6.6-b205/app.js"></script></body></html>
